@@ -50,7 +50,7 @@ function success(message)
 	console.log("Response = " + message.response);
 	console.log("Sent = " + message.bytesSent);
 
-	alert('Post uploaded');
+	change_page("photo.html");
 }
 
 // Fail
@@ -71,6 +71,9 @@ function get_photo() {
 
 // Transfer file
 function upload_photo(imageURI) {
+
+	$.mobile.changePage('#dialog', 'pop', true, true);
+
 	var options = new FileUploadOptions();
 	options.fileKey="file";
 	options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
@@ -79,11 +82,13 @@ function upload_photo(imageURI) {
 	var params = {};
 	params.username = username;
 	params.password = password;
-
 	options.params = params;
 
+	var url = encodeURI(blog_url+"/admin/ajax/mobile.php");
+	console.log(url);
+
 	var ft = new FileTransfer();
-	ft.upload(imageURI, encodeURI(url+"/admin/ajax/mobile.php"), success, fail, options);
+	ft.upload(imageURI, url, success, fail, options);
 }
 
 //======================================================================
