@@ -38,9 +38,9 @@ function init()
 		change_page("dashboard.html");
 }
 
-function change_page(page)
+function open_dialog()
 {
-	$.mobile.changePage(page);
+	$.mobile.changePage("dialog.html", {transition:"pop", role:"dialog"});
 }
 
 // Success
@@ -50,7 +50,7 @@ function success(message)
 	console.log("Response = " + message.response);
 	console.log("Sent = " + message.bytesSent);
 
-	change_page("photo.html");
+	alert("Uploaded");
 }
 
 // Fail
@@ -71,8 +71,6 @@ function get_photo() {
 
 // Transfer file
 function upload_photo(imageURI) {
-
-	$.mobile.changePage('#dialog', 'pop', true, true);
 
 	var options = new FileUploadOptions();
 	options.fileKey="file";
@@ -96,7 +94,6 @@ function upload_photo(imageURI) {
 //======================================================================
 $(document).bind('pageinit', function()
 {
-
 	$("#js_button_login").on("click", function(event)
 	{
 		event.preventDefault();
@@ -113,6 +110,7 @@ $(document).bind('pageinit', function()
 		console.log(username);
 		console.log(password);
 
+		// Change page
 		$.mobile.changePage("dashboard.html");
 	});
 
