@@ -35,12 +35,7 @@ function init()
 		$("#js_password").val(password);
 
 	if(blog_url!=null && username!=null && password!=null)
-		change_page("dashboard.html");
-}
-
-function open_dialog()
-{
-	$.mobile.changePage("dialog.html", {transition:"pop", role:"dialog"});
+		$.mobile.changePage("dashboard.html");
 }
 
 // Success
@@ -51,12 +46,18 @@ function success(message)
 	console.log("Sent = " + message.bytesSent);
 
 	alert("Uploaded");
+
+	// Hide loading
+	$.mobile.hidePageLoadingMsg();
 }
 
 // Fail
 function fail(message)
 {
-  alert('Failed because: ' + message);
+	alert('Failed because: ' + message);
+
+	// Hide loading
+	$.mobile.hidePageLoadingMsg();
 }
 
 // take the photo from the album and upload
@@ -118,7 +119,8 @@ $(document).bind('pageinit', function()
 	{
 		event.preventDefault();
 
-		$(this).html("Uploading...");
+		$.mobile.showPageLoadingMsg("a", "Uploading...");
+
 		get_photo();
 	});
 
@@ -126,7 +128,8 @@ $(document).bind('pageinit', function()
 	{
 		event.preventDefault();
 
-		$(this).html("Uploading...");
+		$.mobile.showPageLoadingMsg("a", "Uploading...");
+
 		take_photo();
 	});
 
