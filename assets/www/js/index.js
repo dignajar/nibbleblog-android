@@ -8,6 +8,8 @@ var password;
 var pictureSource;   // picture source
 var destinationType; // sets the format of returned value
 
+var image_uri;
+
 //======================================================================
 // Events
 //======================================================================
@@ -47,35 +49,75 @@ function success(message)
 
 	alert("Uploaded");
 
+	hide_photo();
+
 	// Hide loading
 	$.mobile.hidePageLoadingMsg();
 }
 
-// Fail
+// Something fail
 function fail(message)
 {
 	alert('Failed because: ' + message);
 
+	hide_photo();
+
 	// Hide loading
 	$.mobile.hidePageLoadingMsg();
 }
 
+// Set photo
+function set_photo(img)
+{
+	image_uri = img;
+
+	var image_block = document.getElementById('js_img_photo');
+	image_block.src = image_uri;
+
+	return true;
+}
+
+// Show photo and upload button
+function show_photo()
+{
+	var box_first = document.getElementById('photo_box_first');
+	var box_second = document.getElementById('photo_box_second');
+
+	box_first.style.display = 'none';
+	box_second.style.display = 'block';
+}
+
+function hide_photo()
+{
+	var box_first = document.getElementById('photo_box_first');
+	var box_second = document.getElementById('photo_box_second');
+
+	box_first.style.display = 'block';
+	box_second.style.display = 'none';
+}
+
 // take the photo from the album and upload
-function take_photo() {
-	navigator.camera.getPicture(upload_photo, fail, {quality: 95, destinationType: destinationType.FILE_URI, targetWidth: 1024, targetHeight: 768});
+function get_photo_from_camera()
+{
+	navigator.camera.getPicture(set_photo, fail, {quality: 95, destinationType: destinationType.FILE_URI, targetWidth: 1024, targetHeight: 768, saveToPhotoAlbum: true});
+
+	show_photo();
 }
 
 // take the photo from the camera and upload
-function get_photo() {
-	navigator.camera.getPicture(upload_photo, fail, {quality: 95, destinationType: destinationType.FILE_URI, sourceType: pictureSource.PHOTOLIBRARY, targetWidth: 1024, targetHeight: 768});
+function get_photo_from_album()
+{
+	navigator.camera.getPicture(set_photo, fail, {quality: 95, destinationType: destinationType.FILE_URI, targetWidth: 1024, targetHeight: 768, sourceType: pictureSource.PHOTOLIBRARY});
+
+	show_photo();
 }
 
 // Transfer file
-function upload_photo(imageURI) {
-
+function upload_photo()
+{
 	var options = new FileUploadOptions();
 	options.fileKey="file";
-	options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
+	options.fileName=image_uri.substr(image_uri.lastIndexOf('/')+1);
 	options.mimeType="image/jpeg";
 
 	var params = {};
@@ -87,7 +129,7 @@ function upload_photo(imageURI) {
 	console.log(url);
 
 	var ft = new FileTransfer();
-	ft.upload(imageURI, url, success, fail, options);
+	ft.upload(image_uri, url, success, fail, options);
 }
 
 //======================================================================
@@ -115,22 +157,27 @@ $(document).bind('pageinit', function()
 		$.mobile.changePage("dashboard.html");
 	});
 
-	$("#js_button_up_photo").on("click", function(event)
+	$("#js_button_album_photo").on("click", function(event)
 	{
 		event.preventDefault();
 
-		$.mobile.showPageLoadingMsg("a", "Uploading...");
-
-		get_photo();
+		get_photo_from_album();
 	});
 
-	$("#js_button_take_photo").on("click", function(event)
+	$("#js_button_camera_photo").on("click", function(event)
+	{
+		event.preventDefault();
+
+		get_photo_from_camera();
+	});
+
+	$("#js_button_upload_photo").on("click", function(event)
 	{
 		event.preventDefault();
 
 		$.mobile.showPageLoadingMsg("a", "Uploading...");
 
-		take_photo();
+		upload_photo();
 	});
 
 });

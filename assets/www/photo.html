@@ -19,8 +19,15 @@
 	<div data-role="content">
 		<h3>New Photo post</h3>
 
-        <a id="js_button_take_photo" data-role="button" href="javascript:void(0)">Camera</a>
-        <a id="js_button_up_photo" data-role="button" href="javascript:void(0)">Album</a>
+		<div id="photo_box_first" style="display: block;">
+			<a id="js_button_camera_photo" data-role="button" href="javascript:void(0)">Camera</a>
+			<a id="js_button_album_photo" data-role="button" href="javascript:void(0)">Album</a>
+        </div>
+
+		<div id="photo_box_second" style="display: none;">
+			<img id="js_img_photo" src="" alt="image" style="display:block; max-width:100%;"/>
+			<a id="js_button_upload_photo" data-role="button" href="javascript:void(0)">Upload</a>
+        </div>
     </div>
 
 </div>
