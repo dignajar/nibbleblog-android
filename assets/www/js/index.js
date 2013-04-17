@@ -4,6 +4,7 @@
 var blog_url;
 var username;
 var password;
+var settings_complete;
 
 var pictureSource;   // picture source
 var destinationType; // sets the format of returned value
@@ -21,6 +22,8 @@ document.addEventListener("deviceready", init, false);
 
 function init()
 {
+	console.log("Function init()");
+
 	pictureSource = navigator.camera.PictureSourceType;
 	destinationType = navigator.camera.DestinationType;
 
@@ -36,20 +39,26 @@ function init()
 	if(password!=null)
 		$("#js_password").val(password);
 
-	if(blog_url!=null && username!=null && password!=null)
-		$.mobile.changePage("dashboard.html");
+	// if settings are complete, then TRUE
+	settings_complete = blog_url!=null && username!=null && password!=null;
+
+	console.log(settings_complete);
+	console.log(blog_url);
+	console.log(username);
+	console.log(password);
 }
 
 // Success
 function success(message)
 {
+	console.log("Function success()");
 	console.log("Code = " + message.responseCode);
 	console.log("Response = " + message.response);
 	console.log("Sent = " + message.bytesSent);
 
 	alert("Uploaded");
 
-	hide_photo();
+	show_hide_photo(false);
 
 	// Hide loading
 	$.mobile.hidePageLoadingMsg();
@@ -58,63 +67,64 @@ function success(message)
 // Something fail
 function fail(message)
 {
+	console.log("Function fail()");
 	alert('Failed because: ' + message);
 
-	hide_photo();
+	show_hide_photo(false);
 
 	// Hide loading
 	$.mobile.hidePageLoadingMsg();
 }
 
 // Set photo
-function set_photo(img)
+function set_photo(imageURI)
 {
-	image_uri = img;
+	console.log("Function set_photo()");
+	image_uri = imageURI;
 
 	var image_block = document.getElementById('js_img_photo');
-	image_block.src = image_uri;
+	image_block.src = imageURI;
 
-	return true;
+	show_hide_photo(true);
 }
 
-// Show photo and upload button
-function show_photo()
+// Show or Hide photo and upload button
+function show_hide_photo(show)
 {
+	console.log("Function show_photo()");
+
 	var box_first = document.getElementById('photo_box_first');
 	var box_second = document.getElementById('photo_box_second');
 
-	box_first.style.display = 'none';
-	box_second.style.display = 'block';
-}
-
-function hide_photo()
-{
-	var box_first = document.getElementById('photo_box_first');
-	var box_second = document.getElementById('photo_box_second');
-
-	box_first.style.display = 'block';
-	box_second.style.display = 'none';
+	if(show)
+	{
+		box_first.style.display = 'none';
+		box_second.style.display = 'block';
+	}
+	else
+	{
+		box_first.style.display = 'block';
+		box_second.style.display = 'none';
+	}
 }
 
 // take the photo from the album and upload
 function get_photo_from_camera()
 {
-	navigator.camera.getPicture(set_photo, fail, {quality: 95, destinationType: destinationType.FILE_URI, targetWidth: 1024, targetHeight: 768, saveToPhotoAlbum: true});
-
-	show_photo();
+	navigator.camera.getPicture(set_photo, fail, {quality: 95, destinationType: Camera.DestinationType.FILE_URI, targetWidth: 1024, targetHeight: 768, saveToPhotoAlbum: true});
 }
 
 // take the photo from the camera and upload
 function get_photo_from_album()
 {
-	navigator.camera.getPicture(set_photo, fail, {quality: 95, destinationType: destinationType.FILE_URI, targetWidth: 1024, targetHeight: 768, sourceType: pictureSource.PHOTOLIBRARY});
-
-	show_photo();
+	navigator.camera.getPicture(set_photo, fail, {quality: 95, destinationType: Camera.DestinationType.FILE_URI, targetWidth: 1024, targetHeight: 768, sourceType: Camera.PictureSourceType.PHOTOLIBRARY});
 }
 
 // Transfer file
 function upload_photo()
 {
+	console.log("Function upload_photo()");
+
 	var options = new FileUploadOptions();
 	options.fileKey="file";
 	options.fileName=image_uri.substr(image_uri.lastIndexOf('/')+1);
@@ -139,7 +149,7 @@ $(document).bind('pageinit', function()
 {
 	$("#js_button_login").on("click", function(event)
 	{
-		event.preventDefault();
+		console.log("Event click js_button_login");
 
 		blog_url = $("#js_blog_url").val();
 		username = $("#js_username").val();
@@ -153,31 +163,36 @@ $(document).bind('pageinit', function()
 		console.log(username);
 		console.log(password);
 
-		// Change page
-		$.mobile.changePage("dashboard.html");
+		return true;
 	});
 
 	$("#js_button_album_photo").on("click", function(event)
 	{
-		event.preventDefault();
+		console.log("Event click js_button_album_photo");
 
 		get_photo_from_album();
+
+		return false;
 	});
 
 	$("#js_button_camera_photo").on("click", function(event)
 	{
-		event.preventDefault();
+		console.log("Event click js_button_camera_photo");
 
 		get_photo_from_camera();
+
+		return false;
 	});
 
 	$("#js_button_upload_photo").on("click", function(event)
 	{
-		event.preventDefault();
+		console.log("Event click js_button_upload_photo");
 
 		$.mobile.showPageLoadingMsg("a", "Uploading...");
 
 		upload_photo();
+
+		return false;
 	});
 
 });

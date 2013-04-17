@@ -18,28 +18,34 @@
 <body>
 
 <!-- Page -->
-<div data-role="page" id="text">
+<div data-role="page" id="index">
 
-    <div data-theme="a" data-role="header">
+	<!-- Header -->
+    <div data-role="header" data-theme="a">
 		<a data-role="button" data-rel="back" data-theme="b" data-icon="arrow-l" data-iconpos="left" class="ui-btn-left">Back</a>
         <h1>Nibbleblog</h1>
     </div>
 
+	<!-- Content -->
 	<div data-role="content">
-		<h3>New post</h3>
+		<h3>Blog settings</h3>
 
 		<div data-role="fieldcontain">
-			<label for="js_title">Blog URL</label>
-			<input name="title" id="js_title" placeholder="" type="text">
+			<label for="js_url">Blog URL</label>
+			<input name="blog_url" id="js_blog_url" placeholder="http://demo.nibbleblog.com" value="http://www.nibbleblog.com/up" type="url">
 		</div>
 
-        <div data-role="fieldcontain">
-            <label for="js_content">Content</label>
-            <textarea name="content" id="js_content" placeholder=""></textarea>
-        </div>
+		<div data-role="fieldcontain">
+			<label for="js_username">Username</label>
+			<input name="username" id="js_username" value="admin" type="text">
+		</div>
 
-		<a id="js_button_publish_text" data-role="button" href="javascript:void(0)" data-icon="plus" data-iconpos="right">Publish</a>
+		<div  data-role="fieldcontain">
+			<label for="js_password">Password</label>
+			<input name="password" id="js_password" value="demo" type="password">
+		</div>
 
+		<a id="js_button_login" data-rel="back" data-role="button" data-icon="home" data-iconpos="right" data-transition="pop">Save</a>
 	</div>
 
 </div>

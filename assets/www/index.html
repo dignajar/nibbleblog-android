@@ -18,34 +18,35 @@
 <body>
 
 <!-- Page -->
-<div data-role="page" id="index">
+<div data-role="page" id="dashboard">
 
-	<!-- Header -->
-    <div data-role="header" data-theme="a">
+    <div data-theme="a" data-role="header">
         <h1>Nibbleblog</h1>
     </div>
 
-	<!-- Content -->
 	<div data-role="content">
-		<h3>Blog settings</h3>
 
-		<div data-role="fieldcontain">
-			<label for="js_url">Blog URL</label>
-			<input name="blog_url" id="js_blog_url" placeholder="http://demo.nibbleblog.com" value="http://www.nibbleblog.com/up" type="url">
-		</div>
+		<ul data-role="listview" data-divider-theme="a" data-inset="true">
+			<li data-role="list-divider" role="heading">New Publish</li>
+			<li data-theme="c">
+				<a href="text.html" data-transition="slide">Text</a>
+			</li>
+			<li data-theme="c">
+				<a href="photo.html" data-transition="slide">Photo</a>
+			</li>
+			<li data-theme="c">
+				<a href="quote.html" data-transition="slide">Quote</a>
+			</li>
+			<li data-role="list-divider" role="heading">Settings</li>
+			<li data-theme="c">
+				<a href="settings.html" data-transition="slide">Blog</a>
+			</li>
+			<li data-theme="c">
+				<a href="about.html" data-transition="slide">About</a>
+			</li>
+		</ul>
 
-		<div data-role="fieldcontain">
-			<label for="js_username">Username</label>
-			<input name="username" id="js_username" placeholder="" value="admin" type="text">
-		</div>
-
-		<div  data-role="fieldcontain">
-			<label for="js_password">Password</label>
-			<input name="password" id="js_password" placeholder="" value="demo" type="password">
-		</div>
-
-		<a id="js_button_login" data-role="button" href="javascript:void(0)" data-icon="home" data-iconpos="left">Login</a>
-	</div>
+    </div>
 
 </div>
 
