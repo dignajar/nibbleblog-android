@@ -39,13 +39,35 @@ function init()
 	if(password!=null)
 		$("#js_password").val(password);
 
-	// if settings are complete, then TRUE
+	check_settings();
+}
+
+// Check settings
+// If not complete then show welcome_first element and settings_complete=false
+function check_settings()
+{
 	settings_complete = blog_url!=null && username!=null && password!=null;
 
-	console.log(settings_complete);
-	console.log(blog_url);
-	console.log(username);
-	console.log(password);
+	if(settings_complete)
+	{
+		hide_element("welcome_first");
+		show_element("welcome_second");
+	}
+	else
+	{
+		hide_element("welcome_second");
+		show_element("welcome_first");
+	}
+}
+
+function show_element(id)
+{
+	document.getElementById(id).style.display = 'block';
+}
+
+function hide_element(id)
+{
+	document.getElementById(id).style.display = 'none';
 }
 
 // Success
@@ -159,10 +181,9 @@ $(document).bind('pageinit', function()
 		window.localStorage.setItem("username", username);
 		window.localStorage.setItem("password", password);
 
-		console.log(blog_url);
-		console.log(username);
-		console.log(password);
+		check_settings()
 
+		// Follow the link in href
 		return true;
 	});
 
