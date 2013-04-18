@@ -181,7 +181,7 @@ $(document).bind('pageinit', function()
 		window.localStorage.setItem("username", username);
 		window.localStorage.setItem("password", password);
 
-		check_settings()
+		check_settings();
 
 		// Follow the link in href
 		return true;
@@ -212,6 +212,17 @@ $(document).bind('pageinit', function()
 		$.mobile.showPageLoadingMsg("a", "Uploading...");
 
 		upload_photo();
+
+		return false;
+	});
+
+	$("#js_button_publish_text").on("click", function(event)
+	{
+		console.log("Event click js_button_publish_text");
+
+		$.mobile.showPageLoadingMsg("a", "Uploading...");
+
+		// debug
 
 		return false;
 	});

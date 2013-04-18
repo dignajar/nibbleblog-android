@@ -18,21 +18,21 @@
 <body>
 
 <!-- Page -->
-<div data-role="page" id="index">
+<div data-role="page" id="page-settings">
 
 	<!-- Header -->
     <div data-role="header" data-theme="a">
-		<a data-role="button" data-rel="back" data-theme="b" data-icon="arrow-l" data-iconpos="left" class="ui-btn-left">Back</a>
+		<a href="index.html" data-role="button" data-theme="a" data-icon="arrow-l" data-iconpos="notext">Back</a>
         <h1>Nibbleblog</h1>
     </div>
 
 	<!-- Content -->
 	<div data-role="content">
-		<h3>Blog settings</h3>
+		<h2>Blog settings</h2>
 
 		<div data-role="fieldcontain">
-			<label for="js_url">Blog URL</label>
-			<input name="blog_url" id="js_blog_url" placeholder="http://demo.nibbleblog.com" value="http://www.nibbleblog.com/up" type="url">
+			<label for="js_blog_url">Blog URL</label>
+			<input name="blog_url" id="js_blog_url" value="http://www.nibbleblog.com/up" type="text">
 		</div>
 
 		<div data-role="fieldcontain">
@@ -45,7 +45,7 @@
 			<input name="password" id="js_password" value="demo" type="password">
 		</div>
 
-		<a id="js_button_login" data-rel="back" data-role="button" data-icon="home" data-iconpos="right" data-transition="pop">Save</a>
+		<a id="js_button_login" data-rel="back" data-role="button" data-transition="pop">Save</a>
 	</div>
 
 </div>

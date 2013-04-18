@@ -3,13 +3,22 @@
 <head>
 
     <title>Nibbleblog</title>
+
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="css/nibbleblog.css" />
+	<link rel="stylesheet" href="css/jquery.mobile.structure-1.3.1.css" />
+
+	<script src="js/cordova-2.6.0.js" charset="utf-8"></script>
+	<script src="js/jquery-1.9.1.min.js" charset="utf-8"></script>
+	<script src="js/jquery.mobile-1.3.1.min.js" charset="utf-8"></script>
+    <script src="js/index.js" charset="utf-8"></script>
 
 </head>
 <body>
 
 <!-- Page -->
-<div data-role="page" id="photo">
+<div data-role="page" id="page-photo">
 
     <div data-theme="a" data-role="header">
 		<a href="index.html" data-role="button" data-theme="a" data-icon="arrow-l" data-iconpos="notext">Back</a>
@@ -17,7 +26,7 @@
     </div>
 
 	<div data-role="content">
-		<h3>New Photo post</h3>
+		<h2>New Photo post</h2>
 
 		<div id="photo_box_first" style="display: block;">
 			<a id="js_button_camera_photo" data-role="button">Camera</a>
@@ -26,7 +35,18 @@
 
 		<div id="photo_box_second" style="display: none;">
 			<img id="js_img_photo" src="" alt="image" style="display:block; max-width:100%;"/>
-			<a id="js_button_upload_photo" data-role="button">Upload</a>
+
+			<div data-role="fieldcontain">
+				<label for="js_title">Title</label>
+				<input name="title" id="js_title" placeholder="" type="text">
+			</div>
+
+			<div data-role="fieldcontain">
+				<label for="js_content">Description</label>
+				<textarea name="content" id="js_content" placeholder=""></textarea>
+			</div>
+
+			<a id="js_button_publish_photo" data-role="button" href="javascript:void(0)" data-icon="plus" data-iconpos="right">Publish</a>
         </div>
     </div>
 
