@@ -218,11 +218,23 @@ $(document).bind('pageinit', function()
 
 	$("#js_button_publish_text").on("click", function(event)
 	{
-		console.log("Event click js_button_publish_text");
+		//$.mobile.showPageLoadingMsg("a", "Uploading...");
 
-		$.mobile.showPageLoadingMsg("a", "Uploading...");
+		var arr = { City: 'Moscow', Age: 25 };
+		$.ajax({
+			url: 'http://www.nibbleblog.com/up/admin/ajax/mobile.php',
+			data: JSON.stringify(arr),
+			dataType: 'jsonp',
+			success: function(msg) {
+				console.log(msg);
+				alert("Up "+msg);
+			},
+            error: function(msg) {
+				console.log(msg);
+                alert("Error: "+msg);
+            }
+		});
 
-		// debug
 
 		return false;
 	});
