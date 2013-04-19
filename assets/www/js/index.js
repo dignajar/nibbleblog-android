@@ -5,10 +5,6 @@ var blog_url;
 var username;
 var password;
 var settings_complete;
-
-var pictureSource;   // picture source
-var destinationType; // sets the format of returned value
-
 var image_uri;
 
 //======================================================================
@@ -17,15 +13,39 @@ var image_uri;
 document.addEventListener("deviceready", init, false);
 
 //======================================================================
+// Functions :: DOM
+//======================================================================
+
+function dom_show_element(id)
+{
+	document.getElementById(id).style.display = 'block';
+}
+
+function dom_hide_element(id)
+{
+	document.getElementById(id).style.display = 'none';
+}
+
+function refresh_page() {
+  $.mobile.changePage(
+    window.location.href,
+    {
+      allowSamePageTransition : true,
+      transition              : 'none',
+      showLoadMsg             : false,
+      reloadPage              : true
+    }
+  );
+}
+
+
+//======================================================================
 // Functions
 //======================================================================
 
 function init()
 {
 	console.log("Function init()");
-
-	pictureSource = navigator.camera.PictureSourceType;
-	destinationType = navigator.camera.DestinationType;
 
 	blog_url = window.localStorage.getItem("blog_url");
 	if(blog_url!=null)
@@ -46,100 +66,94 @@ function init()
 // If not complete then show welcome_first element and settings_complete=false
 function check_settings()
 {
+	console.log("Function check_settings()");
+
 	settings_complete = blog_url!=null && username!=null && password!=null;
 
 	if(settings_complete)
 	{
-		hide_element("welcome_first");
-		show_element("welcome_second");
+		dom_hide_element("welcome_first");
+		dom_show_element("welcome_second");
 	}
 	else
 	{
-		hide_element("welcome_second");
-		show_element("welcome_first");
+		dom_hide_element("welcome_second");
+		dom_show_element("welcome_first");
 	}
 }
 
-function show_element(id)
-{
-	document.getElementById(id).style.display = 'block';
-}
-
-function hide_element(id)
-{
-	document.getElementById(id).style.display = 'none';
-}
-
 // Success
-function success(message)
+function success(msg)
 {
 	console.log("Function success()");
-	console.log("Code = " + message.responseCode);
-	console.log("Response = " + message.response);
-	console.log("Sent = " + message.bytesSent);
 
-	alert("Uploaded");
+	var obj = jQuery.parseJSON(msg);
 
-	show_hide_photo(false);
+	alert(obj.msg);
 
 	// Hide loading
 	$.mobile.hidePageLoadingMsg();
 }
 
 // Something fail
-function fail(message)
+function fail(msg)
 {
 	console.log("Function fail()");
-	alert('Failed because: ' + message);
 
-	show_hide_photo(false);
+	var obj = jQuery.parseJSON(msg);
+
+	alert(obj.msg);
 
 	// Hide loading
 	$.mobile.hidePageLoadingMsg();
+}
+
+//======================================================================
+// Functions :: Photo post
+//======================================================================
+
+function photo_success(msg)
+{
+	console.log("Function photo_success()");
+
+	dom_hide_element("photo_box_second");
+	dom_show_element("photo_box_first");
+
+	success(msg);
+}
+
+function photo_fail(msg)
+{
+	console.log("Function photo_fail()");
+
+	dom_hide_element("photo_box_second");
+	dom_show_element("photo_box_first");
+
+	fail(msg);
 }
 
 // Set photo
 function set_photo(imageURI)
 {
 	console.log("Function set_photo()");
+
 	image_uri = imageURI;
+	document.getElementById('js_img_photo').src = imageURI;
 
-	var image_block = document.getElementById('js_img_photo');
-	image_block.src = imageURI;
-
-	show_hide_photo(true);
-}
-
-// Show or Hide photo and upload button
-function show_hide_photo(show)
-{
-	console.log("Function show_photo()");
-
-	var box_first = document.getElementById('photo_box_first');
-	var box_second = document.getElementById('photo_box_second');
-
-	if(show)
-	{
-		box_first.style.display = 'none';
-		box_second.style.display = 'block';
-	}
-	else
-	{
-		box_first.style.display = 'block';
-		box_second.style.display = 'none';
-	}
+	dom_hide_element("photo_box_first");
+	dom_show_element("photo_box_second");
 }
 
 // take the photo from the album and upload
 function get_photo_from_camera()
 {
-	navigator.camera.getPicture(set_photo, fail, {quality: 95, destinationType: Camera.DestinationType.FILE_URI, targetWidth: 1024, targetHeight: 768, saveToPhotoAlbum: true});
+	navigator.camera.getPicture(set_photo, photo_fail, {quality: 95, destinationType: Camera.DestinationType.FILE_URI, targetWidth: 1024, targetHeight: 768, saveToPhotoAlbum: true});
 }
 
 // take the photo from the camera and upload
 function get_photo_from_album()
 {
-	navigator.camera.getPicture(set_photo, fail, {quality: 95, destinationType: Camera.DestinationType.FILE_URI, targetWidth: 1024, targetHeight: 768, sourceType: Camera.PictureSourceType.PHOTOLIBRARY});
+	navigator.camera.getPicture(set_photo, photo_fail, {quality: 95, destinationType: Camera.DestinationType.FILE_URI, targetWidth: 1024, targetHeight: 768, sourceType: Camera.PictureSourceType.PHOTOLIBRARY});
 }
 
 // Transfer file
@@ -158,10 +172,9 @@ function upload_photo()
 	options.params = params;
 
 	var url = encodeURI(blog_url+"/admin/ajax/mobile.php");
-	console.log(url);
 
 	var ft = new FileTransfer();
-	ft.upload(image_uri, url, success, fail, options);
+	ft.upload(image_uri, url, photo_success, photo_fail, options);
 }
 
 //======================================================================
@@ -218,21 +231,21 @@ $(document).bind('pageinit', function()
 
 	$("#js_button_publish_text").on("click", function(event)
 	{
-		//$.mobile.showPageLoadingMsg("a", "Uploading...");
+		$.mobile.showPageLoadingMsg("a", "Uploading...");
 
-		var arr = { City: 'Moscow', Age: 25 };
+		var url = "http://www.nibbleblog.com/up/admin/ajax/mobile.php";
+		var title = $("#js_title").val();
+		var content = $("#js_content").val();
+
 		$.ajax({
-			url: 'http://www.nibbleblog.com/up/admin/ajax/mobile.php',
-			data: JSON.stringify(arr),
+			url: url,
+			data: {type: "simple", username: username, password: password, title: title, content: content},
 			dataType: 'jsonp',
 			success: function(msg) {
-				console.log(msg);
-				alert("Up "+msg);
+				success(msg);
+				refresh_page();
 			},
-            error: function(msg) {
-				console.log(msg);
-                alert("Error: "+msg);
-            }
+            error: fail
 		});
 
 
